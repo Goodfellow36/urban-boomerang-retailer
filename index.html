@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urban Boomerang — Retailer Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dark: #A07830;
+    --green: #1DB87A;
+    --green-dark: #0D8A5A;
+    --blue: #3B82F6;
+    --red: #EF4444;
+    --amber: #F59E0B;
+    --ink: #05080D;
+    --ink2: #080C13;
+    --ink3: #0D1219;
+    --ink4: #111820;
+    --ink5: #161E2A;
+    --cream: #F0EAD8;
+    --cream70: rgba(240,234,216,0.7);
+    --cream35: rgba(240,234,216,0.35);
+    --cream10: rgba(240,234,216,0.1);
+    --cream04: rgba(240,234,216,0.04);
+    --gold-dim: rgba(201,168,76,0.08);
+    --gold-border: rgba(201,168,76,0.2);
+    --gold-border2: rgba(201,168,76,0.4);
+    --green-dim: rgba(29,184,122,0.1);
+    --green-border: rgba(29,184,122,0.25);
+    --border: rgba(255,255,255,0.06);
+    --sidebar-width: 240px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  .login-screen {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    padding: 24px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 48px 40px;
+  }
+
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .login-logo-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), #F0D878);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .login-logo-text { font-size: 18px; font-weight: 800; color: var(--cream); }
+  .login-logo-sub { font-size: 11px; color: var(--cream35); letter-spacing: 0.1em; }
+
+  .login-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .login-sub { font-size: 14px; color: var(--cream35); margin-bottom: 32px; line-height: 1.6; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--cream35); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+
+  .form-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--ink4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    color: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus { border-color: var(--gold-border2); }
+  .form-input::placeholder { color: var(--cream35); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), #F0D878);
+    color: var(--ink);
+    width: 100%;
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  .btn-gold:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--cream35); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--border); color: var(--cream); }
+  .btn-green { background: var(--green); color: white; }
+  .btn-sm { padding: 8px 16px; font-size: 12px; border-radius: 8px; }
+
+  .login-error {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #EF4444;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .login-demo {
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--cream35);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .login-demo strong { color: var(--gold); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--ink2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 50;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-logo-icon {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .sidebar-logo-text { font-size: 13px; font-weight: 800; color: var(--cream); }
+  .sidebar-logo-sub { font-size: 10px; color: var(--cream35); }
+
+  .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream35);
+    padding: 12px 20px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream35);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { color: var(--cream); background: var(--cream04); }
+  .nav-item.active { color: var(--gold); background: var(--gold-dim); border-right: 2px solid var(--gold); }
+  .nav-item-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .retailer-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .retailer-badge-icon { font-size: 20px; }
+  .retailer-badge-name { font-size: 12px; font-weight: 700; color: var(--cream); }
+  .retailer-badge-tier { font-size: 10px; color: var(--gold); font-weight: 600; }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    background: rgba(5,8,13,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 40;
+  }
+
+  .topbar-title { font-size: 16px; font-weight: 800; color: var(--cream); letter-spacing: -0.3px; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .status-pill.active { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
+  .status-pill.pending { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .content { padding: 32px; flex: 1; }
+
+  /* ── PAGE SECTIONS ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--gold-border); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream35);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: var(--green); }
+  .stat-value.blue { color: var(--blue); }
+  .stat-value.cream { color: var(--cream); }
+
+  .stat-change {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .stat-change.negative { color: var(--red); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title { font-size: 14px; font-weight: 700; color: var(--cream); }
+  .card-sub { font-size: 12px; color: var(--cream35); margin-top: 2px; }
+  .card-body { padding: 0; }
+  .card-body.padded { padding: 24px; }
+
+  /* ── TABLE ── */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream35);
+    padding: 12px 24px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--ink4);
+  }
+
+  td {
+    padding: 14px 24px;
+    font-size: 13px;
+    color: var(--cream70);
+    border-bottom: 1px solid var(--cream04);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--cream04); }
+
+  .td-bold { font-weight: 600; color: var(--cream); }
+  .td-gold { color: var(--gold); font-weight: 700; }
+  .td-green { color: var(--green); font-weight: 700; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-gold { background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold); }
+  .badge-green { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
+  .badge-amber { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--amber); }
+  .badge-dim { background: var(--cream04); border: 1px solid var(--border); color: var(--cream35); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    height: 6px;
+    background: var(--cream04);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 8px 0 4px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), #F0D878);
+  }
+
+  .progress-fill.green { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+
+  /* ── CHART PLACEHOLDER ── */
+  .chart-area {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 24px 16px;
+  }
+
+  .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; max-width: 40px; }
+
+  .chart-bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+    transition: opacity 0.2s;
+    cursor: pointer;
+    min-height: 4px;
+  }
+
+  .chart-bar:hover { opacity: 0.8; }
+  .chart-bar.green { background: linear-gradient(180deg, var(--green) 0%, var(--green-dark) 100%); }
+  .chart-label { font-size: 10px; color: var(--cream35); text-align: center; }
+
+  /* ── TIER CARD ── */
+  .tier-card {
+    background: linear-gradient(135deg, #14100A, var(--ink3));
+    border: 1px solid var(--gold-border2);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tier-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--cream35);
+  }
+
+  .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state-title { font-size: 16px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+  .empty-state-sub { font-size: 14px; color: var(--cream35); line-height: 1.6; }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: var(--cream35);
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── LAYOUT HELPERS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .flex { display: flex; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; }
+  .flex-center { display: flex; align-items: center; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .gap-4 { gap: 16px; }
+  .mb-4 { margin-bottom: 16px; }
+  .mb-6 { margin-bottom: 24px; }
+  .mt-4 { margin-top: 16px; }
+  .text-gold { color: var(--gold); }
+  .text-green { color: var(--green); }
+  .text-cream35 { color: var(--cream35); }
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 11px; }
+  .font-bold { font-weight: 700; }
+  .font-extrabold { font-weight: 800; }
+
+  .section-header { margin-bottom: 20px; }
+  .section-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--cream35); }
+
+  /* ── NOTIFICATION TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--cream);
+    z-index: 1000;
+    display: none;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .toast.show { display: flex; }
+  .toast.success { border-color: var(--green-border); }
+  .toast.error { border-color: rgba(239,68,68,0.3); }
+</style>
+</head>
+<body>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Success</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════════════ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🔄</div>
+      <div>
+        <div class="login-logo-text">Urban Boomerang</div>
+        <div class="login-logo-sub">RETAILER PORTAL</div>
+      </div>
+    </div>
+
+    <h1 class="login-title">Welcome back.</h1>
+    <p class="login-sub">Sign in to your retailer dashboard to view your boomerang stats, transactions, and community impact.</p>
+
+    <div class="login-error" id="login-error"></div>
+
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input type="email" class="form-input" id="login-email" placeholder="you@yourbusiness.com" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="login-password" placeholder="••••••••" />
+    </div>
+
+    <button class="btn btn-gold" onclick="handleLogin()" id="login-btn" style="margin-top:8px;">
+      Sign In →
+    </button>
+
+    <div class="login-demo">
+      <strong>Demo Mode</strong> — Use any email + password to explore the portal.<br>
+      Connect to your live account once approved as a partner.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN PORTAL
+════════════════════════════════════════════════════ -->
+<div id="portal" style="display:none; width:100%; min-height:100vh; position:relative;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🔄</div>
+      <div>
+        <div class="sidebar-logo-text">Urban Boomerang</div>
+        <div class="sidebar-logo-sub">RETAILER PORTAL</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" onclick="showPage('dashboard', this)">
+        <span class="nav-item-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('transactions', this)">
+        <span class="nav-item-icon">💳</span> Transactions
+      </div>
+      <div class="nav-item" onclick="showPage('boomerangs', this)">
+        <span class="nav-item-icon">🔄</span> Boomerangs
+      </div>
+
+      <div class="nav-section-label" style="margin-top:8px;">Community</div>
+      <div class="nav-item" onclick="showPage('impact', this)">
+        <span class="nav-item-icon">✊🏾</span> Community Impact
+      </div>
+      <div class="nav-item" onclick="showPage('initiatives', this)">
+        <span class="nav-item-icon">🎯</span> Initiatives
+      </div>
+
+      <div class="nav-section-label" style="margin-top:8px;">Business</div>
+      <div class="nav-item" onclick="showPage('customers', this)">
+        <span class="nav-item-icon">👥</span> Members
+      </div>
+      <div class="nav-item" onclick="showPage('payouts', this)">
+        <span class="nav-item-icon">💸</span> Payout History
+      </div>
+      <div class="nav-item" onclick="showPage('settings', this)">
+        <span class="nav-item-icon">⚙️</span> Settings
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="retailer-badge">
+        <div class="retailer-badge-icon" id="sidebar-emoji">🏠</div>
+        <div>
+          <div class="retailer-badge-name" id="sidebar-name">Your Business</div>
+          <div class="retailer-badge-tier" id="sidebar-tier">🥇 Gold Partner · 3%</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%; font-size:12px; padding:9px;" onclick="handleLogout()">
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="status-pill active">
+          <div class="status-dot"></div>
+          Active Partner
+        </div>
+        <div style="font-size:13px; color:var(--cream35);" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── DASHBOARD PAGE ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="section-header mb-6">
+          <div class="section-title">Good morning, <span id="retailer-firstname">Partner</span> 👋</div>
+          <div class="section-sub">Here's how your store is performing this month.</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid mb-6">
+          <div class="stat-card">
+            <div class="stat-label">Qualifying Sales</div>
+            <div class="stat-value gold" id="stat-sales">$0</div>
+            <div class="stat-change" id="stat-sales-change">↑ 0% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Boomerangs Generated</div>
+            <div class="stat-value green" id="stat-boomerangs">$0.00</div>
+            <div class="stat-change" id="stat-boomerangs-change">↑ 0% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">UB Member Visits</div>
+            <div class="stat-value blue" id="stat-visits">0</div>
+            <div class="stat-change" id="stat-visits-change">↑ 0% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Community Funded</div>
+            <div class="stat-value cream" id="stat-community">$0.00</div>
+            <div class="stat-change">Net to initiatives</div>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-6">
+          <!-- Sales Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Monthly Sales</div>
+                <div class="card-sub">Qualifying UB purchases</div>
+              </div>
+              <span class="badge badge-gold">Last 6 months</span>
+            </div>
+            <div class="chart-area" id="sales-chart">
+              <!-- Generated by JS -->
+            </div>
+            <div style="display:flex; justify-content:center; gap:4px; padding-bottom:16px;" id="chart-labels"></div>
+          </div>
+
+          <!-- Tier Card -->
+          <div class="tier-card">
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); opacity:0.8; margin-bottom:16px;">Your Partnership Tier</div>
+            <div style="font-size:48px; margin-bottom:8px;" id="tier-emoji">🥇</div>
+            <div style="font-size:28px; font-weight:800; color:var(--gold); letter-spacing:-0.5px; margin-bottom:4px;" id="tier-name">Gold Partner</div>
+            <div style="font-size:14px; color:var(--cream35); margin-bottom:20px;" id="tier-rate">3% of every qualifying purchase boomerangs back</div>
+
+            <div style="font-size:12px; color:var(--cream35); margin-bottom:6px;">Progress to Platinum</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:68%"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--cream35); margin-top:4px;">
+              <span id="tier-sales-label">$8,420 qualifying sales</span>
+              <span>$12,500 for Platinum</span>
+            </div>
+
+            <div style="margin-top:20px; padding:14px; background:rgba(0,0,0,0.3); border-radius:10px;">
+              <div style="font-size:12px; color:var(--cream35); margin-bottom:4px;">Monthly platform fee</div>
+              <div style="font-size:22px; font-weight:800; color:var(--cream);" id="tier-fee">$299<span style="font-size:14px; color:var(--cream35);">/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Qualifying Transactions</div>
+              <div class="card-sub">UB members who visited your store</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('transactions', document.querySelector('[onclick*=\"transactions\"]'))">View All</button>
+          </div>
+          <div class="card-body" id="recent-transactions-body">
+            <div class="loading"><div class="spinner"></div> Loading transactions...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TRANSACTIONS PAGE ── -->
+      <div class="page" id="page-transactions">
+        <div class="section-header mb-6">
+          <div class="section-title">Transactions</div>
+          <div class="section-sub">All qualifying UB member purchases at your store</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Transaction History</div>
+            <div style="display:flex; gap:8px;">
+              <select style="background:var(--ink4); border:1px solid var(--border); color:var(--cream35); padding:7px 12px; border-radius:8px; font-size:12px; font-family:'Manrope',sans-serif;">
+                <option>All time</option>
+                <option>This month</option>
+                <option>Last month</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body" id="transactions-body">
+            <div class="loading"><div class="spinner"></div> Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BOOMERANGS PAGE ── -->
+      <div class="page" id="page-boomerangs">
+        <div class="section-header mb-6">
+          <div class="section-title">Boomerangs</div>
+          <div class="section-sub">Community dollars generated by your customers</div>
+        </div>
+        <div class="stats-grid mb-6">
+          <div class="stat-card">
+            <div class="stat-label">Total Boomeranged</div>
+            <div class="stat-value gold" id="b-total">$0.00</div>
+            <div class="stat-change">All time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value green" id="b-month">$0.00</div>
+            <div class="stat-change" id="b-month-change">↑ 0%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Boomerangs</div>
+            <div class="stat-value blue" id="b-count">0</div>
+            <div class="stat-change">Transactions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Per Visit</div>
+            <div class="stat-value cream" id="b-avg">$0.00</div>
+            <div class="stat-change">Per transaction</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Boomerang Log</div>
+          </div>
+          <div class="card-body" id="boomerangs-body">
+            <div class="loading"><div class="spinner"></div> Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── IMPACT PAGE ── -->
+      <div class="page" id="page-impact">
+        <div class="section-header mb-6">
+          <div class="section-title">Community Impact</div>
+          <div class="section-sub">The real-world effect of your partnership</div>
+        </div>
+        <div class="grid-2 mb-6">
+          <div class="card" style="border-color:var(--gold-border);">
+            <div class="card-body padded">
+              <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Your Store's Impact</div>
+              <div style="font-size:56px; font-weight:800; color:var(--gold); letter-spacing:-2px; line-height:1; margin-bottom:8px;" id="impact-total">$0.00</div>
+              <div style="font-size:14px; color:var(--cream35);">sent to community initiatives by your customers</div>
+              <div class="progress-bar" style="margin-top:20px;">
+                <div class="progress-fill" id="impact-bar" style="width:0%"></div>
+              </div>
+              <div style="font-size:12px; color:var(--cream35); margin-top:6px;" id="impact-bar-label">0% of $10K community goal</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body padded">
+              <div style="font-size:14px; font-weight:700; color:var(--cream); margin-bottom:16px;">Where It Goes</div>
+              <div id="impact-initiatives">
+                <div class="loading"><div class="spinner"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Your Impact Statement</div>
+            <div class="card-sub">Share this with your customers</div>
+          </div>
+          <div class="card-body padded">
+            <div style="background:var(--gold-dim); border:1px solid var(--gold-border); border-radius:12px; padding:24px; font-size:16px; font-style:italic; color:var(--cream); line-height:1.7;" id="impact-statement">
+              "Every purchase at our store through Urban Boomerang automatically sends money back to our community. We've funded <strong style="color:var(--gold)">$0</strong> in community initiatives together."
+            </div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:12px;" onclick="copyImpactStatement()">📋 Copy Statement</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── INITIATIVES PAGE ── -->
+      <div class="page" id="page-initiatives">
+        <div class="section-header mb-6">
+          <div class="section-title">Community Initiatives</div>
+          <div class="section-sub">Where your customers' boomerangs are going</div>
+        </div>
+        <div id="initiatives-grid">
+          <div class="loading"><div class="spinner"></div> Loading initiatives...</div>
+        </div>
+      </div>
+
+      <!-- ── MEMBERS PAGE ── -->
+      <div class="page" id="page-customers">
+        <div class="section-header mb-6">
+          <div class="section-title">UB Members</div>
+          <div class="section-sub">Anonymous member activity at your store (privacy-protected)</div>
+        </div>
+        <div class="stats-grid mb-6">
+          <div class="stat-card">
+            <div class="stat-label">Total Members Visited</div>
+            <div class="stat-value gold" id="c-total">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Repeat Members</div>
+            <div class="stat-value green" id="c-repeat">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Spend/Visit</div>
+            <div class="stat-value blue" id="c-avg">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Member Retention</div>
+            <div class="stat-value cream" id="c-retention">0%</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body padded">
+            <div class="empty-state">
+              <div class="empty-state-icon">🔒</div>
+              <div class="empty-state-title">Member Privacy Protected</div>
+              <div class="empty-state-sub">Individual member data is anonymized to protect privacy.<br>Aggregate stats are shown above.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PAYOUTS PAGE ── -->
+      <div class="page" id="page-payouts">
+        <div class="section-header mb-6">
+          <div class="section-title">Payout History</div>
+          <div class="section-sub">Monthly community disbursements generated by your store</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Disbursement Log</div>
+            <div class="card-sub">Funds sent to initiatives on your customers' behalf</div>
+          </div>
+          <div class="card-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>Initiative</th>
+                  <th>Gross Boomerangs</th>
+                  <th>Platform Fee</th>
+                  <th>Net Disbursed</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="payouts-body">
+                <tr>
+                  <td colspan="6">
+                    <div class="empty-state" style="padding:40px;">
+                      <div class="empty-state-icon">💸</div>
+                      <div class="empty-state-title">No payouts yet</div>
+                      <div class="empty-state-sub">Payouts process on the 1st of each month<br>after the 30-day hold period completes.</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS PAGE ── -->
+      <div class="page" id="page-settings">
+        <div class="section-header mb-6">
+          <div class="section-title">Store Settings</div>
+          <div class="section-sub">Manage your retailer profile and partnership details</div>
+        </div>
+        <div class="grid-2">
+          <div class="card mb-4">
+            <div class="card-header"><div class="card-title">Business Information</div></div>
+            <div class="card-body padded">
+              <div class="form-group">
+                <label class="form-label">Business Name</label>
+                <input type="text" class="form-input" id="settings-name" placeholder="Your Business Name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" class="form-input" id="settings-city" placeholder="City" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-input" id="settings-category">
+                  <option>Restaurant</option>
+                  <option>Coffee</option>
+                  <option>Grocery</option>
+                  <option>Beauty & Personal Care</option>
+                  <option>Gas Station</option>
+                  <option>Home Improvement</option>
+                  <option>Apparel</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <button class="btn btn-gold" style="width:100%;" onclick="saveSettings()">Save Changes</button>
+            </div>
+          </div>
+          <div>
+            <div class="card mb-4">
+              <div class="card-header"><div class="card-title">Partnership Status</div></div>
+              <div class="card-body padded">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+                  <span style="font-size:13px; color:var(--cream35);">Current Tier</span>
+                  <span class="badge badge-gold" id="settings-tier-badge">🥇 Gold</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+                  <span style="font-size:13px; color:var(--cream35);">Contribution Rate</span>
+                  <span style="font-size:13px; font-weight:700; color:var(--gold);" id="settings-rate">3%</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:13px; color:var(--cream35);">Monthly Fee</span>
+                  <span style="font-size:13px; font-weight:700; color:var(--cream);" id="settings-fee">$299/month</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Support</div></div>
+              <div class="card-body padded">
+                <p style="font-size:13px; color:var(--cream35); margin-bottom:16px; line-height:1.6;">Need help with your account, tier upgrade, or dispute resolution?</p>
+                <a href="mailto:retailers@urbanboomerang.app" class="btn btn-ghost" style="width:100%; justify-content:center;">📧 Contact Partner Support</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /portal -->
+
+<script>
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
+const API_URL = 'https://api.urbanboomerang.app/v1'
+
+// Demo retailer data — used when API isn't available
+const DEMO = {
+  retailer: {
+    name: 'Home Depot',
+    firstName: 'Marcus',
+    emoji: '🏠',
+    tier: 'gold',
+    contributionRate: 0.03,
+    city: 'Frisco, TX',
+  },
+  stats: {
+    monthlySales: 18420,
+    monthlyBoomerangs: 552.60,
+    monthlyVisits: 284,
+    communityFunded: 541.55,
+    salesChange: +23,
+    boomerangChange: +18,
+    visitsChange: +31,
+  },
+  chartData: [8200, 11400, 9800, 14200, 16800, 18420],
+  chartLabels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+  transactions: [
+    { date: 'Mar 27, 2026', time: '2:14 PM', amount: 127.43, boomerang: 3.82, member: 'Member #4821', initiative: 'Prime Time Youth' },
+    { date: 'Mar 27, 2026', time: '11:32 AM', amount: 84.20, boomerang: 2.53, member: 'Member #2934', initiative: 'Urban Scholar Fund' },
+    { date: 'Mar 26, 2026', time: '5:47 PM', amount: 213.80, boomerang: 6.41, member: 'Member #7102', initiative: 'Prime Time Youth' },
+    { date: 'Mar 26, 2026', time: '3:22 PM', amount: 56.99, boomerang: 1.71, member: 'Member #1847', initiative: 'ATL Land Trust' },
+    { date: 'Mar 25, 2026', time: '10:08 AM', amount: 341.50, boomerang: 10.25, member: 'Member #5521', initiative: 'O\'Neal Fund' },
+  ],
+  initiatives: [
+    { name: 'Prime Time Youth Foundation', emoji: '🏈', pct: 48, amount: 260.14 },
+    { name: 'Urban Scholar Fund', emoji: '🎓', pct: 24, amount: 129.97 },
+    { name: "O'Neal Community Fund", emoji: '🏀', pct: 16, amount: 86.65 },
+    { name: 'ATL Community Land Trust', emoji: '🏠', pct: 12, amount: 64.99 },
+  ],
+}
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let state = { loggedIn: false, retailer: null, token: null }
+
+// ════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim()
+  const password = document.getElementById('login-password').value
+  const btn = document.getElementById('login-btn')
+  const errorEl = document.getElementById('login-error')
+
+  if (!email) { showError('Please enter your email address'); return }
+
+  btn.textContent = 'Signing in...'
+  btn.disabled = true
+  errorEl.style.display = 'none'
+
+  // Try real API first, fall back to demo mode
+  try {
+    const res = await fetch(`${API_URL}/auth/retailer/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    const data = await res.json()
+    if (res.ok && data.data?.accessToken) {
+      state.token = data.data.accessToken
+      state.retailer = data.data.retailer
+      launchPortal(data.data.retailer)
+      return
+    }
+  } catch (e) {
+    // API not available — use demo mode
+  }
+
+  // Demo mode — any email/password works
+  await new Promise(r => setTimeout(r, 800))
+  state.retailer = { ...DEMO.retailer, email }
+  launchPortal(state.retailer)
+}
+
+function handleLogout() {
+  state = { loggedIn: false, retailer: null, token: null }
+  document.getElementById('portal').style.display = 'none'
+  document.getElementById('login-screen').style.display = 'flex'
+}
+
+function showError(msg) {
+  const el = document.getElementById('login-error')
+  el.textContent = msg
+  el.style.display = 'block'
+  document.getElementById('login-btn').textContent = 'Sign In →'
+  document.getElementById('login-btn').disabled = false
+}
+
+// ════════════════════════════════════════════════
+// PORTAL LAUNCH
+// ════════════════════════════════════════════════
+function launchPortal(retailer) {
+  document.getElementById('login-screen').style.display = 'none'
+  document.getElementById('portal').style.display = 'flex'
+  document.getElementById('portal').style.flexDirection = 'row'
+
+  // Set retailer info
+  const tierConfig = {
+    gold:     { emoji: '🥇', label: 'Gold Partner · 3%', fee: '$299', rate: '3%', tiername: 'Gold Partner' },
+    silver:   { emoji: '🥈', label: 'Silver Partner · 2%', fee: '$149', rate: '2%', tiername: 'Silver Partner' },
+    bronze:   { emoji: '🥉', label: 'Bronze Partner · 1%', fee: '$49', rate: '1%', tiername: 'Bronze Partner' },
+    platinum: { emoji: '💎', label: 'Platinum Partner · 4%', fee: '$499', rate: '4%', tiername: 'Platinum Partner' },
+  }
+  const tier = tierConfig[retailer.tier || 'gold']
+
+  document.getElementById('sidebar-name').textContent = retailer.name || 'Your Business'
+  document.getElementById('sidebar-emoji').textContent = retailer.emoji || '🏪'
+  document.getElementById('sidebar-tier').textContent = tier.label
+  document.getElementById('retailer-firstname').textContent = retailer.firstName || 'Partner'
+  document.getElementById('tier-emoji').textContent = tier.emoji
+  document.getElementById('tier-name').textContent = tier.tiername
+  document.getElementById('tier-rate').textContent = `${tier.rate} of every qualifying purchase boomerangs back`
+  document.getElementById('tier-fee').innerHTML = `${tier.fee}<span style="font-size:14px; color:var(--cream35);">/mo</span>`
+  document.getElementById('settings-tier-badge').textContent = `${tier.emoji} ${tier.tiername}`
+  document.getElementById('settings-rate').textContent = tier.rate
+  document.getElementById('settings-fee').textContent = `${tier.fee}/month`
+  document.getElementById('settings-name').value = retailer.name || ''
+  document.getElementById('settings-city').value = retailer.city || ''
+
+  // Set date
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })
+
+  // Load data
+  loadDashboard()
+}
+
+// ════════════════════════════════════════════════
+// DATA LOADING
+// ════════════════════════════════════════════════
+function loadDashboard() {
+  const s = DEMO.stats
+
+  // Stats
+  document.getElementById('stat-sales').textContent = '$' + s.monthlySales.toLocaleString()
+  document.getElementById('stat-boomerangs').textContent = '$' + s.monthlyBoomerangs.toFixed(2)
+  document.getElementById('stat-visits').textContent = s.monthlyVisits.toLocaleString()
+  document.getElementById('stat-community').textContent = '$' + s.communityFunded.toFixed(2)
+  document.getElementById('stat-sales-change').textContent = `↑ ${s.salesChange}% vs last month`
+  document.getElementById('stat-boomerangs-change').textContent = `↑ ${s.boomerangChange}% vs last month`
+  document.getElementById('stat-visits-change').textContent = `↑ ${s.visitsChange}% vs last month`
+  document.getElementById('tier-sales-label').textContent = `$${s.monthlySales.toLocaleString()} qualifying sales`
+
+  // Chart
+  renderChart()
+
+  // Recent transactions
+  renderTransactionsTable('recent-transactions-body', DEMO.transactions.slice(0, 4))
+
+  // Full transactions
+  renderTransactionsTable('transactions-body', DEMO.transactions)
+
+  // Boomerangs
+  loadBoomerangs()
+
+  // Impact
+  loadImpact()
+
+  // Initiatives
+  loadInitiatives()
+
+  // Members
+  document.getElementById('c-total').textContent = '284'
+  document.getElementById('c-repeat').textContent = '142'
+  document.getElementById('c-avg').textContent = '$' + (DEMO.stats.monthlySales / DEMO.stats.monthlyVisits).toFixed(0)
+  document.getElementById('c-retention').textContent = '50%'
+}
+
+function renderChart() {
+  const maxVal = Math.max(...DEMO.chartData)
+  const chartEl = document.getElementById('sales-chart')
+  const labelsEl = document.getElementById('chart-labels')
+
+  chartEl.innerHTML = DEMO.chartData.map((val, i) => {
+    const h = Math.round((val / maxVal) * 140)
+    const isLast = i === DEMO.chartData.length - 1
+    return `<div class="chart-bar-wrap">
+      <div class="chart-bar${isLast ? '' : ' green'}" style="height:${h}px;" title="$${val.toLocaleString()}"></div>
+    </div>`
+  }).join('')
+
+  labelsEl.innerHTML = DEMO.chartLabels.map(l =>
+    `<div style="flex:1; max-width:40px; text-align:center; font-size:10px; color:var(--cream35);">${l}</div>`
+  ).join('')
+}
+
+function renderTransactionsTable(containerId, transactions) {
+  const el = document.getElementById(containerId)
+  if (!transactions.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💳</div><div class="empty-state-title">No transactions yet</div><div class="empty-state-sub">Qualifying purchases from UB members will appear here.</div></div>`
+    return
+  }
+
+  el.innerHTML = `<table>
+    <thead>
+      <tr>
+        <th>Date & Time</th>
+        <th>Member</th>
+        <th>Purchase Amount</th>
+        <th>Boomerang</th>
+        <th>Initiative</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${transactions.map(t => `<tr>
+        <td><div class="td-bold">${t.date}</div><div style="font-size:11px;color:var(--cream35);">${t.time}</div></td>
+        <td class="text-cream35">${t.member}</td>
+        <td class="td-bold">$${t.amount.toFixed(2)}</td>
+        <td class="td-green">+$${t.boomerang.toFixed(2)}</td>
+        <td><span class="badge badge-dim">${t.initiative}</span></td>
+        <td><span class="badge badge-green">✓ Qualifying</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`
+}
+
+function loadBoomerangs() {
+  const total = DEMO.transactions.reduce((s, t) => s + t.boomerang, 0)
+  document.getElementById('b-total').textContent = '$' + (total * 4.2).toFixed(2)
+  document.getElementById('b-month').textContent = '$' + DEMO.stats.monthlyBoomerangs.toFixed(2)
+  document.getElementById('b-month-change').textContent = `↑ ${DEMO.stats.boomerangChange}%`
+  document.getElementById('b-count').textContent = '284'
+  document.getElementById('b-avg').textContent = '$' + (DEMO.stats.monthlyBoomerangs / DEMO.stats.monthlyVisits).toFixed(2)
+  renderTransactionsTable('boomerangs-body', DEMO.transactions)
+}
+
+function loadImpact() {
+  const total = DEMO.stats.communityFunded
+  document.getElementById('impact-total').textContent = '$' + total.toFixed(2)
+  const pct = Math.round((total / 10000) * 100)
+  document.getElementById('impact-bar').style.width = pct + '%'
+  document.getElementById('impact-bar-label').textContent = `${pct}% of $10K community goal`
+  document.getElementById('impact-statement').innerHTML = `"Every purchase at our store through Urban Boomerang automatically sends money back to our community. We've funded <strong style='color:var(--gold)'>$${total.toFixed(2)}</strong> in community initiatives together."`
+
+  document.getElementById('impact-initiatives').innerHTML = DEMO.initiatives.map(init => `
+    <div style="margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <div style="font-size:13px; color:var(--cream);">${init.emoji} ${init.name}</div>
+        <div style="font-size:13px; font-weight:700; color:var(--gold);">$${init.amount.toFixed(2)}</div>
+      </div>
+      <div class="progress-bar" style="height:4px;">
+        <div class="progress-fill" style="width:${init.pct}%"></div>
+      </div>
+      <div style="font-size:11px; color:var(--cream35); margin-top:3px;">${init.pct}% of your impact</div>
+    </div>
+  `).join('')
+}
+
+function loadInitiatives() {
+  document.getElementById('initiatives-grid').innerHTML = `
+    <div class="grid-2">
+      ${DEMO.initiatives.map(init => `
+        <div class="card" style="border-color:var(--gold-border);">
+          <div class="card-body padded">
+            <div style="font-size:36px; margin-bottom:12px;">${init.emoji}</div>
+            <div style="font-size:16px; font-weight:800; color:var(--cream); margin-bottom:4px;">${init.name}</div>
+            <div style="font-size:13px; color:var(--gold); margin-bottom:12px;">$${init.amount.toFixed(2)} from your store</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${init.pct}%"></div></div>
+            <div style="font-size:11px; color:var(--cream35); margin-top:4px;">${init.pct}% of your total community impact</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>`
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showPage(pageId, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'))
+  document.getElementById('page-' + pageId).classList.add('active')
+  if (navEl) navEl.classList.add('active')
+
+  const titles = {
+    dashboard: 'Dashboard', transactions: 'Transactions',
+    boomerangs: 'Boomerangs', impact: 'Community Impact',
+    initiatives: 'Initiatives', customers: 'Members',
+    payouts: 'Payout History', settings: 'Settings',
+  }
+  document.getElementById('topbar-title').textContent = titles[pageId] || pageId
+}
+
+// ════════════════════════════════════════════════
+// ACTIONS
+// ════════════════════════════════════════════════
+function saveSettings() {
+  showToast('✅', 'Settings saved successfully')
+}
+
+function copyImpactStatement() {
+  const text = document.getElementById('impact-statement').innerText
+  navigator.clipboard.writeText(text)
+  showToast('📋', 'Impact statement copied to clipboard')
+}
+
+function showToast(icon, msg) {
+  const toast = document.getElementById('toast')
+  document.getElementById('toast-icon').textContent = icon
+  document.getElementById('toast-msg').textContent = msg
+  toast.classList.add('show')
+  setTimeout(() => toast.classList.remove('show'), 3000)
+}
+
+// ════════════════════════════════════════════════
+// KEYBOARD
+// ════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
+    handleLogin()
+  }
+})
+</script>
+</body>
+</html>
